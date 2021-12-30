@@ -1,6 +1,8 @@
 package br.com.alura.gerenciador.servlet;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,15 +28,17 @@ public class UnicaEntradaServlet extends HttpServlet {
 		
 		System.out.println(request.getRequestURI());
 		
+		String nome = null;
+		
 		if (paramAcao.equals("listaEmpresa")) {
 			
-			ListaEmpresas acao = new ListaEmpresas();
-			acao.executa(request,response);
+			ListaEmpresas listaEmpresa = new ListaEmpresas();
+			nome = listaEmpresa.executa(request,response);
 			
 		}else if (paramAcao.equals("removeEmpresa")) {
 			
 			RemoveEmpresa removeEmpresa = new RemoveEmpresa();
-			removeEmpresa.executa(request, response);
+			nome = removeEmpresa.executa(request, response);
 			
 		}else if (paramAcao.equals("mostraEmpresa")) {
 			
@@ -50,6 +54,15 @@ public class UnicaEntradaServlet extends HttpServlet {
 			
 			NovaEmpresa novaEmpresa = new NovaEmpresa();
 			novaEmpresa.executa(request, response);
+		}
+		
+		String[] tipoEEndereco = nome.split(":");
+		
+		if (tipoEEndereco[0].equals("forward")) {
+			RequestDispatcher rd = request.getRequestDispatcher(tipoEEndereco[1]);
+			rd.forward(request, response);
+		}else {
+			response.sendRedirect(tipoEEndereco[1]);
 		}
 	
 	}

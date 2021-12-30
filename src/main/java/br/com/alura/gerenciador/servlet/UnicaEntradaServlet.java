@@ -43,17 +43,17 @@ public class UnicaEntradaServlet extends HttpServlet {
 		}else if (paramAcao.equals("mostraEmpresa")) {
 			
 			MostraEmpresa mostraEmpresa = new MostraEmpresa();
-			mostraEmpresa.executa(request, response);
+			nome = mostraEmpresa.executa(request, response);
 			
 		}else if (paramAcao.equals("alteraEmpresa")) {
 			
 			AlteraEmpresa alteraEmpresa = new AlteraEmpresa();
-			alteraEmpresa.executa(request,response);
+			nome = alteraEmpresa.executa(request,response);
 			
 		}else if (paramAcao.equals("novaEmpresa")) {
 			
 			NovaEmpresa novaEmpresa = new NovaEmpresa();
-			novaEmpresa.executa(request, response);
+			nome = novaEmpresa.executa(request, response);
 		}
 		
 		String[] tipoEEndereco = nome.split(":");

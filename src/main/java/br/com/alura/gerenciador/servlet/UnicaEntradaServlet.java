@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.alura.gerenciador.acao.Acao;
 import br.com.alura.gerenciador.acao.AlteraEmpresa;
 import br.com.alura.gerenciador.acao.ListaEmpresas;
 import br.com.alura.gerenciador.acao.MostraEmpresa;
@@ -25,42 +26,53 @@ public class UnicaEntradaServlet extends HttpServlet {
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String paramAcao = request.getParameter("acao");
-		
 		System.out.println(request.getRequestURI());
+		String paramAcao = request.getParameter("acao");
+		String nomeClasse = "br.com.alura.gerenciador.acao." + paramAcao.substring(0, 1).toUpperCase() + paramAcao.substring(1);
 		
 		String nome = null;
-		
-		if (paramAcao.equals("listaEmpresa")) {
-			
-			ListaEmpresas listaEmpresa = new ListaEmpresas();
-			nome = listaEmpresa.executa(request,response);
-			
-		}else if (paramAcao.equals("removeEmpresa")) {
-			
-			RemoveEmpresa removeEmpresa = new RemoveEmpresa();
-			nome = removeEmpresa.executa(request, response);
-			
-		}else if (paramAcao.equals("mostraEmpresa")) {
-			
-			MostraEmpresa mostraEmpresa = new MostraEmpresa();
-			nome = mostraEmpresa.executa(request, response);
-			
-		}else if (paramAcao.equals("alteraEmpresa")) {
-			
-			AlteraEmpresa alteraEmpresa = new AlteraEmpresa();
-			nome = alteraEmpresa.executa(request,response);
-			
-		}else if (paramAcao.equals("novaEmpresa")) {
-			
-			NovaEmpresa novaEmpresa = new NovaEmpresa();
-			nome = novaEmpresa.executa(request, response);
-			
-		}else if (paramAcao.equals("novaEmpresaForm")) {
-			
-			NovaEmpresaForm novaEmpresa = new NovaEmpresaForm();
-			nome = novaEmpresa.executa(request, response);
+		try {
+			Class classe = Class.forName(nomeClasse);
+			Object obj = classe.newInstance();
+			Acao acao = (Acao) obj;
+			nome = acao.executa(request,response);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException
+				| ServletException e) {
+			new ServletException(e);
 		}
+		
+//		String nome = null;
+//		
+//		if (paramAcao.equals("listaEmpresa")) {
+//			
+//			ListaEmpresas listaEmpresa = new ListaEmpresas();
+//			nome = listaEmpresa.executa(request,response);
+//			
+//		}else if (paramAcao.equals("removeEmpresa")) {
+//			
+//			RemoveEmpresa removeEmpresa = new RemoveEmpresa();
+//			nome = removeEmpresa.executa(request, response);
+//			
+//		}else if (paramAcao.equals("mostraEmpresa")) {
+//			
+//			MostraEmpresa mostraEmpresa = new MostraEmpresa();
+//			nome = mostraEmpresa.executa(request, response);
+//			
+//		}else if (paramAcao.equals("alteraEmpresa")) {
+//			
+//			AlteraEmpresa alteraEmpresa = new AlteraEmpresa();
+//			nome = alteraEmpresa.executa(request,response);
+//			
+//		}else if (paramAcao.equals("novaEmpresa")) {
+//			
+//			NovaEmpresa novaEmpresa = new NovaEmpresa();
+//			nome = novaEmpresa.executa(request, response);
+//			
+//		}else if (paramAcao.equals("novaEmpresaForm")) {
+//			
+//			NovaEmpresaForm novaEmpresa = new NovaEmpresaForm();
+//			nome = novaEmpresa.executa(request, response);
+//		}
 		
 		String[] tipoEEndereco = nome.split(":");
 		

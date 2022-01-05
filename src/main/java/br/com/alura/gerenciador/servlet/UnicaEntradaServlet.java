@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import br.com.alura.gerenciador.acao.Acao;
 import br.com.alura.gerenciador.acao.AlteraEmpresa;
@@ -28,6 +29,15 @@ public class UnicaEntradaServlet extends HttpServlet {
 
 		System.out.println(request.getRequestURI());
 		String paramAcao = request.getParameter("acao");
+		HttpSession session = request.getSession();
+		boolean usuarioNaoEstaLogado = (session.getAttribute("usuarioLogado") == null);
+		boolean ehUmaAcaoProtegida = !(paramAcao.equals("Login")||paramAcao.equals("LoginForm")); 
+		
+		if (ehUmaAcaoProtegida && usuarioNaoEstaLogado) {
+			response.sendRedirect("entrada?acao=LoginForm");
+			return;
+		}
+		
 		String nomeClasse = "br.com.alura.gerenciador.acao." + paramAcao.substring(0, 1).toUpperCase() + paramAcao.substring(1);
 		
 		String nome = null;

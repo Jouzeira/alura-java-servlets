@@ -26,6 +26,10 @@ public class Empresa {
 	public void setDataAbertura(Date dataAbertura) {
 		this.dataAbertura = dataAbertura;
 	}
+	@Override
+	public String toString() {
+		return "Empresa [id=" + id + ", nome=" + nome + ", dataAbertura=" + dataAbertura + "]";
+	}
 	
 	
 
